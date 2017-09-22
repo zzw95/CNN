@@ -36,4 +36,45 @@ def print_prob(prob, file_path, n=5):
         print('prob:{} -> {}'.format(p,s))
     return topN
 
+def shuffle_data(datasets, labels):
+    # 随机化处理
+    assert datasets.shape[0]==labels.shape[0]
+    permutation = np.random.permutation(labels.shape[0])
+    shuffled_datasets = datasets[permutation]
+    shuffled_labels = labels[permutation]
+    return shuffled_datasets, shuffled_labels
+
+def split_data(datasets, labels, train_size, valid_size, test_size):
+    assert (train_size+valid_size+test_size)<=1
+    assert datasets.shape[0]==labels.shape[0]
+    num = datasets.shape[0]
+    train_idx = int(num*train_size)
+    valid_idx = int(num*(train_size+valid_size))
+    test_idx = int(num*(train_size+valid_size+test_size))
+    train_datasets = datasets[:train_idx]
+    train_labels = labels[:train_idx]
+    valid_datasets = datasets[train_idx:valid_idx]
+    valid_labels = labels[train_idx:valid_idx]
+    test_datasets = datasets[valid_idx:test_idx]
+    test_labels = labels[valid_idx:test_idx]
+    return train_datasets, train_labels, valid_datasets, valid_labels, test_datasets, test_labels
+
+def one_hot_encode(labels):
+    """
+    :param: Y -- vector containing the labels, shape = (number of examples,1) or (number of examples)
+    :return: Y_onehot -- one hot matrix, shape = (dim, number of examples)
+    """
+    dim = np.max(labels) + 1
+    labels_onehot = ( np.arange(dim) == labels.reshape([labels.shape[0],1]) ) * 1
+    assert labels_onehot.shape==(labels.shape[0], dim)
+    return labels_onehot
+
+def get_batches(datasets, labels, n_batches):
+    batch_size = len(datasets) // n_batches
+    for i in range(n_batches):
+        batch_datasets = datasets[i*batch_size:(i+1)*batch_size]
+        batch_labels = labels[i*batch_size:(i+1)*batch_size]
+        yield  batch_datasets, batch_labels
+
+
 

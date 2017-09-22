@@ -6,8 +6,8 @@ import vgg16
 
 img_tiger = utils.load_image('data/tiger.jpeg')
 img_puzzle = utils.load_image('data/puzzle.jpeg')
-img_tiger = utils.resize_image(img_tiger).reshape([1, 224, 224, 3])*255
-img_puzzle = utils.resize_image(img_puzzle).reshape([1,224, 224, 3])*255
+img_tiger = utils.resize_image(img_tiger).reshape([1, 224, 224, 3])
+img_puzzle = utils.resize_image(img_puzzle).reshape([1,224, 224, 3])
 
 images = np.concatenate([img_tiger, img_puzzle], axis =0)
 

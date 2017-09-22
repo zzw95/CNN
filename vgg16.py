@@ -23,7 +23,7 @@ class Vgg16:
         assert images.get_shape().as_list()[1:]==[224,224,3],"The shape of image should be [224,224,3]."
 
         #convert RGB to BGR
-        red, green, blue = tf.split(images, num_or_size_splits=3, axis=3)
+        red, green, blue = tf.split(images*255.0, num_or_size_splits=3, axis=3)
         BGR = tf.concat([blue-VGG_MEAN[0], green-VGG_MEAN[1], red-VGG_MEAN[2]], axis=3)
         assert BGR.get_shape().as_list()[1:]==[224,224,3]
 
