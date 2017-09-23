@@ -44,6 +44,11 @@ def shuffle_data(datasets, labels):
     shuffled_labels = labels[permutation]
     return shuffled_datasets, shuffled_labels
 
+def normalize_data(datasets):
+    min_ = np.min(datasets)
+    max_ = np.max(datasets)
+    return (datasets-min_)/(max_-min_)
+
 def split_data(datasets, labels, train_size, valid_size, test_size):
     assert (train_size+valid_size+test_size)<=1
     assert datasets.shape[0]==labels.shape[0]
@@ -59,13 +64,19 @@ def split_data(datasets, labels, train_size, valid_size, test_size):
     test_labels = labels[valid_idx:test_idx]
     return train_datasets, train_labels, valid_datasets, valid_labels, test_datasets, test_labels
 
-def one_hot_encode(labels):
+def one_hot_encode(labels, dim = None):
     """
     :param: Y -- vector containing the labels, shape = (number of examples,1) or (number of examples)
     :return: Y_onehot -- one hot matrix, shape = (dim, number of examples)
     """
-    dim = np.max(labels) + 1
+    if dim==None:
+        dim = np.max(labels) + 1
     labels_onehot = ( np.arange(dim) == labels.reshape([labels.shape[0],1]) ) * 1
+
+    # or
+    # from tflearn.data_utils import to_categorical
+    # return to_categorical(labels,dim)
+
     assert labels_onehot.shape==(labels.shape[0], dim)
     return labels_onehot
 
